@@ -15,3 +15,8 @@ Edit: 3 - now feature_test5 has merged with master
 and got the core lib updates (to class 1 and class 2
 done by git_learn_1 in the master branch
 //***********************************************
+
+
+//***********************************************
+Edit: 4 - This is another update based on the core lib update
+//***********************************************
