@@ -14,3 +14,9 @@
 //Edit 3: After this edit, I'm going to revert the commit that did Edit #2 
 //newline3
 //***********************************************
+
+
+//***********************************************
+Edit 4: by git_learn_1:master
+newline4: This edit is needed by git_learn_2:feature_test5
+//***********************************************
