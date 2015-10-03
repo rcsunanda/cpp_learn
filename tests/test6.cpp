@@ -14,3 +14,9 @@ Meanwhile git_learn_1 updates the core library and pushes to central rep
 Edit 3: (to see order of commits after merge
 B
 //***********************************************
+
+
+//***********************************************
+Edit 4: (to see order of commits after merge
+D
+//***********************************************
