@@ -1,0 +1,58 @@
+        -:    0:Source:Student.h
+        -:    0:Graph:main.gcno
+        -:    0:Data:main.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#pragma once
+        -:    2:
+        -:    3:#include <string>
+        -:    4:#include <cstring>
+        -:    5:#include <iostream>
+        -:    6:
+        -:    7:class Student
+        -:    8:{
+        -:    9:public:
+        1:   10:	Student()
+        -:   11:		: m_age(-1)
+        -:   12:		, m_name("John Doe")
+        -:   13:		, m_city{"Colombo"}
+        1:   14:		, m_country("Sri Lanka") 
+        1:   15:	{}
+        -:   16:	
+        -:   17:	Student(int age)
+        -:   18:		: m_age(age)
+        -:   19:		, m_name("John Doe") 
+        -:   20:		, m_city{""}
+        -:   21:	{}
+        -:   22:	
+        1:   23:	Student(int age, std::string name, const char* city)
+        -:   24:		: m_age(age)
+        1:   25:		, m_name(name)
+        -:   26:	{
+        1:   27:		strncpy(m_city, city, 20);
+        1:   28:	}
+        -:   29:
+        2:   30:	~Student() {}
+        -:   31:
+        2:   32:	void printString(const char* str)
+        -:   33:	{
+        2:   34:		std::cout << "str = " << str << std::endl;
+        2:   35:	}
+        -:   36:
+        -:   37:	int getAge() { return m_age; }
+        -:   38:
+        -:   39:	const char* getCity() { return m_city; }
+        -:   40:	void setCity(const char* city) { strncpy(m_city, city, 20); }
+        -:   41:
+        -:   42:private:
+        -:   43:	const int m_ID = 10;
+        -:   44:	int m_age = -1;
+        -:   45:
+        -:   46:	std::string m_name;	//this is the preferred way to have string members
+        -:   47:	
+        -:   48:	char m_city[20];	//if std::string is not used, use this one
+        -:   49:	
+        -:   50:	const char* m_country = nullptr;	//this is not suitable, as it is only a pointer, and the string exists somewhere else in memory.
+        -:   51:							//the ownership could be someone else's, and it could be destroyed without Student's knowledge
+        -:   52:
+        -:   53:};

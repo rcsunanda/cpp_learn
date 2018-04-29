@@ -1,0 +1,254 @@
+        -:    0:Source:main.cpp
+        -:    0:Graph:main.gcno
+        -:    0:Data:main.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1://g++ -std=c++11 -ggdb main.cpp Cat.cpp -o pointers_and_arrays
+        -:    2:
+        -:    3:#include <iostream>
+        -:    4:#include <cstdlib>
+        -:    5:
+        -:    6:#include "Cat.h"
+        -:    7:#include "Student.h"
+        -:    8:#include "ArrayHolder.h"
+        -:    9:
+        1:   10:int main(int argc, char** argv)
+        -:   11:{
+        1:   12:	std::cout << "Entering program" << std::endl;
+        -:   13:	
+        -:   14:	//********************************************************************
+        -:   15:	//Case 1: Simple pointer to object on stack
+        -:   16:
+        1:   17:	int x = 10;
+        -:   18:	int* p;
+        -:   19:
+        -:   20:	//p = nullptr;
+        1:   21:	p = &x;
+        1:   22:	*p = 25;
+        -:   23:
+        -:   24:
+        -:   25:	//********************************************************************
+        -:   26:	//Case 2: Simple pointer to object on heap
+        -:   27:
+        1:   28:	int* pHeapObject = new int(10);
+        1:   29:	*pHeapObject = 25;
+        1:   30:	delete pHeapObject;
+        -:   31:
+        -:   32:	//********************************************************************
+        -:   33:	//Case 3: Pointer to pointer to object on heap (normal behavior)
+        -:   34:
+        1:   35:	int* pHeapObject2 = new int(10);
+        1:   36:	int** ppObject = &pHeapObject2;
+        1:   37:	delete pHeapObject2;
+        -:   38:
+        -:   39:	//********************************************************************
+        -:   40:	//Case 4: Array on stack - indexing and accessing via pointer arithmetic
+        -:   41:
+        1:   42:	constexpr int N = 3;	//For correct behavior N must be const or constexpr (just int also works, but GDB doesn't recognize that stackArray is an array)
+        1:   43:	int stackArray[N] = {10, 11, 12};
+        -:   44:
+        1:   45:	int* pointerToFirstElement = &stackArray[0];	//A
+        1:   46:	int* decayedPointerToFirstElement = stackArray;	//B
+        1:   47:	int (*pointerToArray)[N] = &stackArray;	//C
+        -:   48:	
+        -:   49:	//Technically, pointer to an array is C, but normally when we say pointer to an array, we mean pointer to the first element as in A or B
+        -:   50:	//When A or B are subscripted or incremented, we get the elements of the array
+        -:   51:	//When C is subscripted or incremented, we get an entire array of int with size N --> useful only for arrays of arrays
+        -:   52:
+        -:   53:	//********************************************************************
+        -:   54:	//Case 5: Array on stack - runtime array size (VLA - variable length arrays)
+        -:   55:	//--> this works if size >= 3 (3 is the size of the initialzer list): (except for issue of GDB not recognizing the array as an array)
+        -:   56:	//This method is not recommended as it is not part of the C++ standard
+        -:   57:
+        1:   58:	int size=3;
+        1:   59:	if (argc > 1)
+    #####:   60:		size=atoi(argv[1]);
+        -:   61:
+        -:   62://	int stackArray2[size] = {10, 11, 12};
+        -:   63://	int* pArr2 = stackArray2;
+        -:   64:
+        -:   65:
+        -:   66:	//********************************************************************
+        -:   67:	//Case 6: Array on heap - Dynamically allocated contiguous memory block on heap (heap based array) - size calculated at run time because we're using new
+        -:   68:	//(acting like an array; theoratically satisfies conditions for an array, but GDB doesn't recognize it as an array as it is technically a pointer)
+        -:   69:	//Seen in classes, but not suitable if the object is large (unlike int), as although they're created in the heap, this needs a large chunk of contiguous heap memory
+        -:   70:
+        1:   71:	Cat* pBlock = new Cat[size];	//pointer to Cat (this is used to access the array we're creating on the heap)
+        -:   72:	
+        -:   73:	//size is calculated at run-time; pointer pBlock points to the first element (Cat) of the newed memory block
+        -:   74:	//default constructor is called for each element when allocating a memory block of objects like this
+        -:   75:
+        1:   76:	for (int i = 0; i < size; ++i)
+        -:   77:	{
+        -:   78:		//std::cout << "Cat # " << i << ", age: " << pBlock[i].getAge() << std::endl;	//valid because the array contains default-constructed Cats
+        -:   79:	}
+        -:   80:
+        1:   81:	delete[] pBlock;	//Cat Destructor is run on each object, and then the memory block is released
+        -:   82:
+        -:   83:
+        -:   84:	//********************************************************************
+        -:   85:	//Case 7: Array of Cat* (pointer to Cat) on stack - objects are newed on heap
+        -:   86:	//Can be used in classes, but if the the array size is large and the class object is created on the stack, it might be a problem
+        -:   87:	//		(even though the array contains pointers and actual objects are on the heap)
+        -:   88:	
+        1:   89:	Cat* catPointerArray[size]; //Array of pointers on stack
+        -:   90:
+        -:   91:	//catPointerArray[2]->getAge();  //Invalid (segfault) because pointers in catArr have garbage values; create Cat objects and assign their addresses
+        -:   92:
+        4:   93:	for (int i = 0; i < size; ++i)
+        -:   94:	{
+        3:   95:		catPointerArray[i] = new Cat();
+        -:   96:	}
+        -:   97:
+        -:   98:	//After usage call delete on each pointer individually
+        -:   99:
+        4:  100:	for (int i = 0; i < size; ++i)
+        -:  101:	{
+        3:  102:		delete catPointerArray[i];
+        -:  103:	}
+        -:  104:
+        -:  105:	
+        -:  106:	//********************************************************************
+        -:  107:	//Case 8: Array of Cat* (pointer to Cat) on heap (compare with Case 6, where the array contains objects, not pointers)
+        -:  108:	//This is also commonly seen in classes, very suitable as the class contains only a single pointer so class objects can be created on stack with no issue (unlike Case 7),
+        -:  109:	//			and the array contains pointers so Cat object size doesn't matter (unlike Case 6)
+        -:  110:	
+        1:  111:	Cat** pCatPointerBlock = nullptr;	//pointer to Cat pointer (this is used to access the array of Cat pointers we're creating on the heap)
+        -:  112:
+        1:  113:	pCatPointerBlock = new Cat*[size];	//size is calculated at run-time; pCatPointerBlock points to the first element (Cat pointer) of the newed memory block
+        -:  114:
+        -:  115:	//pCatPointerBlock[2]->getAge(); ////Invalid (segfault) because pointers in the newed heap block have garbage values; create Cat objects and assign their addresses
+        -:  116:
+        4:  117:	for (int i = 0; i < size; ++i)
+        -:  118:	{
+        3:  119:		pCatPointerBlock[i] = new Cat(i);
+        -:  120:	}
+        -:  121:
+        -:  122:	//After usage call delete on each pointer individually, and also deallocate the memory block
+        -:  123:
+        4:  124:	for (int i = 0; i < size; ++i)
+        -:  125:	{
+        3:  126:		delete pCatPointerBlock[i];
+        -:  127:	}
+        -:  128:	
+        1:  129:	delete[] pCatPointerBlock;	//deallocate the memory block
+        -:  130:
+        -:  131:	//********************************************************************
+        -:  132:	//Case 9: Const pointer - modifying an object via a const pointer (not allowed)
+        -:  133:	//Const array - modifying objects in a const array (not allowed)
+        -:  134:
+        1:  135:	const int* pInt = new int(25);
+        -:  136:	//*pInt = 222;	//not allowed (does not compile), because we cannot modify the integer via pInt (const int*)
+        -:  137:
+        -:  138:	//if you really want to modify, you need a const_cast (highly discouraged - only useful when dealing with faulting libs/APIs)
+        1:  139:	int* nonConstPint = const_cast<int*>(pInt);
+        1:  140:	*nonConstPint = 333;
+        -:  141:
+        -:  142:	const int constIntArr[] = {1, 2, 3, 4, 5};
+        -:  143:	//constIntArr[0] = 111;	//not allowed (does not compile), because element type is const int
+        -:  144:	//int* ptr = constIntArr; //not allowed (does not compile), invalid conversion from ‘const int*’ to ‘int*’
+        -:  145:
+        1:  146:	delete pInt;
+        -:  147:
+        -:  148:	//********************************************************************
+        -:  149:	//Case 10: String literals
+        -:  150:
+        -:  151:	/////////////////////////////////////////As arrays
+        -:  152:
+        -:  153:	//As const char[] array (array of null-terminated characters)
+        1:  154:	const char str1[] = "Yohn Rajendra";	//Special way of initializing a character array (compiler adds a null character to the end)
+        -:  155:								//&str1 == (const char (*)[5]) 0xbffff572 AND ALSO, p &str1[0] == 0xbffff572 "John"
+        -:  156:								//--->This array is on the stack --> check with destruction --> verified with following code
+        -:  157:	
+        -:  158:	//When initializing as above, if you're giving an array size, make sure that size = length + 1 (for null-character)
+        -:  159:	{
+        1:  160:		const char stackCharArr[] = "CooooooL";
+        1:  161:		std::cout << "dummy" << std::endl;
+        -:  162:	}
+        -:  163:	
+        -:  164:	//str1[0] = 'K';	//not allowed (constness), even if modified with a const_cast, undeffined behaviour
+        -:  165:
+        -:  166:	const char str2[] = {'J', 'o', 'h', 'n', '\0'};	//same as above. But memory location --> &str2 = (const char (*)[5]) 0x8049055 <str2> ---> (on .rodata)
+        -:  167:
+        -:  168:	//C string literal as char[] array
+        1:  169:	char str3[] = "Mary";
+        1:  170:	str3[0] = 'K';	//Perfectly fine to modify elements in this array. see note in memory placement
+        -:  171:
+        1:  172:	char strX[] = {'Q', 'W', 'E', 'R', '\0'}; //Compiler treats this as an array of type char rather than a string literal, and places it on the stack
+        -:  173:
+        -:  174:
+        -:  175:	//Note: String literals are not modifiable. They may be placed in read-only memory such as .rodata
+        -:  176:
+        -:  177:	/////////////////////////////////////////As pointers
+        -:  178:
+        -:  179:	//As const char* (pointer to first element in array of null-terminated characters) --> //Compare this with Case 4 and 6 (it's the same)
+        1:  180:	const char* str4 = "Jenny";	//str4 = 0x804903f "Jenny"
+        -:  181:
+        -:  182:	//C string literal as char* --> valid in C++03 (due to a special rule in the standard), invalid in C++11 (however compiler may allow it and warn that it's deprecated)
+        1:  183:	char* str5 = "Dean";
+        -:  184:	//str5[0] = 'Q';	//Undefined behavior --> gives segfault as it's trying to modify data in a read-only memory section (.rodata)
+        -:  185:
+        -:  186:	//Invalid attempt to modify a string literal (String literals are not modifiable)
+        1:  187:	const char* str6 = "Martin";
+        1:  188:	str6 = "Frank";	//This compiles because we're modifying the pointer (address of location it's pointing to), and not the pointed value (which is const char)
+        -:  189:					//It modifies the pointer to point to a separate string literal in a different memory location (possibly .rodata section) that was created at compile-time
+        -:  190:					//We loose the pointer to the earlier string "Martin" (it is not destroyed as string literals have static duration)
+        -:  191:					//This expression can fool you to think that you're modifying the original string "Martin" to "Frank", and this could lead to a large .rodata section, which is not desirable
+        -:  192:
+        1:  193:	str6 = argv[0];
+        -:  194:	
+        -:  195:	/////////////////////////////////////////Memory placement of string literals (gcc 4.9)
+        -:  196:	
+        -:  197:	//Following on .rodata
+        -:  198:	//const char* str = "AAA"
+        -:  199:	//char* str = "QQQ"
+        -:  200:	//const char str[] = {'W', 'W', 'W', '\0'}
+        -:  201:
+        -:  202:
+        -:  203:	//Following on stack
+        -:  204:	//const char str[] = "WWW"
+        -:  205:	//char str[] = "RRR"
+        -:  206:	//char str[] = {'W', 'W', 'W', '\0'}	//As opposed to const version
+        -:  207:
+        -:  208:	//These depends on compiler, executable format and platform.
+        -:  209:	//General rule: if you want mutable string literals, use non-const character arrays, (char mutableString[])
+        -:  210:
+        -:  211:	/////////////////////////////////// where will a string literal assigned at run time go? probably not .rodata????
+        -:  212:
+        -:  213:
+        -:  214:	//********************************************************************
+        -:  215:	//Case 11: Strings in classes
+        -:  216:
+        1:  217:	Student s1;
+        1:  218:	s1.printString("POLIA");
+        1:  219:	s1.printString(argv[2]);
+        -:  220:
+        2:  221:	Student s2(44, "Moppy", "Islamabad");
+        -:  222:
+        -:  223:	//********************************************************************
+        -:  224:	//Case 12: Array initialization
+        -:  225:	
+        -:  226:	double aArr[5];
+        1:  227:	double bArr[5] = {};
+        1:  228:	double cArr[5] = {0.0};
+        1:  229:	double dArr[5] = {1.5};
+        -:  230:
+        -:  231:	double eArr[5];
+        1:  232:	std::fill(eArr, eArr+5, 6.6);
+        -:  233:
+        -:  234:	double fArr[5];
+        1:  235:	std::fill_n(fArr, 5, 7.7);
+        -:  236:
+        -:  237:	//********************************************************************
+        -:  238:	//Case 13: Arrays in classes
+        -:  239:
+        2:  240:	ArrayHolder holder;
+        -:  241:
+        1:  242:	ArrayHolder* pHolder = new ArrayHolder();
+        -:  243:
+        1:  244:	delete pHolder;
+        -:  245:
+        1:  246:	std::cout << "Exiting program" << std::endl;
+        -:  247:
+        2:  248:	return 0;
+        3:  249:}

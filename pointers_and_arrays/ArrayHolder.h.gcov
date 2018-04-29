@@ -1,0 +1,96 @@
+        -:    0:Source:ArrayHolder.h
+        -:    0:Graph:main.gcno
+        -:    0:Data:main.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#pragma once
+        -:    2:
+        -:    3:#include <iostream>
+        -:    4:#include "Cat.h"
+        -:    5:
+        -:    6:constexpr int N = 4;
+        -:    7:
+        -:    8:class ArrayHolder
+        -:    9:{
+        -:   10:public:
+        -:   11:	ArrayHolder();
+        -:   12:	~ArrayHolder();
+        -:   13:
+        -:   14:private:
+        -:   15:	//Case 4
+        -:   16:	int arr1[N];	//array elements are garbage values --> initialize in c'tor
+        -:   17:	Cat arr2[N];	//objects are initialized with default constructor
+        -:   18:						//--> can use a different c'tor in initializer too (see the constructor)
+        -:   19:
+        -:   20:	//Case 6
+        -:   21:	int* p1;
+        -:   22:	Cat* p2;	//p1, p2 pointers are initialized to garbage values
+        -:   23:
+        -:   24:
+        -:   25:	//Case 7
+        -:   26:	int* arr3[N];
+        -:   27:	Cat* arr4[N];	//arr3, arr4 array elements are initialized to garbage values
+        -:   28:						//--> create new objects and assign their addresses to array elements
+        -:   29:
+        -:   30:	//Case 8
+        -:   31:	int** pp1;
+        -:   32:	Cat** pp2;	//pp1, pp2 pointers are initialized to garbage values
+        -:   33:};
+        -:   34:
+        -:   35:
+        -:   36://*************************************************************************************************
+        2:   37:ArrayHolder::ArrayHolder():
+        -:   38:			arr1{0},
+        -:   39:			arr2{Cat(43, "AliG"), Cat(55, "Darth"), Cat(12, "Vader"), Cat(15, "Fred")},	//can do this in a loop too
+        -:   40:
+        2:   41:			p1{new int[6]},	//the 6 ints are zero-initialzed; the array size 6 can be determined at run-time
+        2:   42:			p2{new Cat[3]},	//the 3 cats are initialized with default c'tor; the array size 3 can be determined at run-time
+        -:   43:
+        -:   44:			arr3{new int(111), new int(222), new int(333), new int(444)},
+        8:   45:			arr4{new Cat(43, "AliG"), new Cat(55, "Dath"), new Cat(12, "Vader"), new Cat(15, "Fred")},	//can do this in a loop too
+        -:   46:
+        2:   47:			pp1{new int*[6]},
+       16:   48:			pp2{new Cat*[3]}	//the pointer elements in the arrays pointed to by pp1 and pp2 are are initialized to zero
+        -:   49:								//--> new objects must be created and their addresses must be assigned to the array elements (see below)
+        -:   50:{
+        -:   51:	//Creating new objects and storing their pointers in pp1 and pp2
+       14:   52:	for (int i = 0; i < 6; ++i)
+        -:   53:	{
+       12:   54:		pp1[i] = new int(i);
+        -:   55:	}
+        -:   56:
+        8:   57:	for (int i = 0; i < 3; ++i)
+        -:   58:	{
+        6:   59:		pp2[i] = new Cat(i, "SomeCat");
+        -:   60:	}
+        2:   61:}
+        -:   62:
+        -:   63:
+        -:   64://*************************************************************************************************
+       12:   65:ArrayHolder::~ArrayHolder()
+        -:   66:{
+        -:   67:	//deleting p1, p2
+        2:   68:	delete[] p1;
+        2:   69:	delete[] p2;
+        -:   70:
+        -:   71:	//deleting arr3, arr4
+       10:   72:	for (int i = 0; i < N; ++i)
+        -:   73:	{
+        8:   74:		delete arr3[i];
+        8:   75:		delete arr4[i];
+        -:   76:	}
+        -:   77:
+        -:   78:	//deleting pp1, pp2
+       14:   79:	for (int i = 0; i < 6; ++i)
+        -:   80:	{
+       12:   81:		delete pp1[i];
+        -:   82:	}
+        -:   83:
+        8:   84:	for (int i = 0; i < 3; ++i)
+        -:   85:	{
+        6:   86:		delete pp2[i];
+        -:   87:	}
+        -:   88:
+        2:   89:	delete[] pp1;
+        2:   90:	delete[] pp2;
+       10:   91:}

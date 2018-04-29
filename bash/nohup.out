@@ -1,0 +1,53 @@
+------------------ 1
+------------------ 2
+------------------ 3
+total 257K
+-rwxrwxrwx 1 root root    0 Apr 13 13:06 another file.txt
+-rwxrwxrwx 1 root root   56 Apr 13 12:00 args.sh
+-rwxrwxrwx 1 root root 220K Apr 11 19:21 core
+-rwxrwxrwx 1 root root  115 Apr 13 14:01 file.txt
+-rwxrwxrwx 1 root root   63 Apr 24 08:42 nohup.out
+-rwxrwxrwx 1 root root 7.3K Apr 16 20:12 passed_args_env
+-rwxrwxrwx 1 root root  411 Apr 16 20:12 passed_args_env.cpp
+-rwxrwxrwx 1 root root 2.0K Apr 23 14:43 script10_arrays.sh
+-rwxrwxrwx 1 root root  504 Apr 24 08:42 script11_io.sh
+-rwxrwxrwx 1 root root  216 Apr 13 14:18 script1.txt
+-rwxrwxrwx 1 root root   59 Apr  7 22:23 script2.sh
+-rwxrwxrwx 1 root root  100 Apr 10 01:00 script3_variables.sh
+-rwxrwxrwx 1 root root 1.4K Apr 13 09:44 script4_quoting.sh
+-rwxrwxrwx 1 root root   73 Apr 15 22:50 script5_arithmetic.sh
+-rwxrwxrwx 1 root root  147 Apr 16 20:18 script6_assignment_error.sh
+-rwxrwxrwx 1 root root 1016 Apr 22 00:26 script7_conditional.sh
+-rwxrwxrwx 1 root root  271 Apr 23 08:36 script8_loops.sh
+-rwxrwxrwx 1 root root  542 Apr 23 10:04 script9_case_select.sh
+-rwxrwxrwx 1 root root   10 Apr 24 08:42 test.txt
+------------------ 4
+------------------ 5
+------------------ 6
+------------------ 1
+------------------ 2
+------------------ 3
+total 261K
+-rwxrwxrwx 1 root root    0 Apr 13 13:06 another file.txt
+-rwxrwxrwx 1 root root   56 Apr 13 12:00 args.sh
+-rwxrwxrwx 1 root root 220K Apr 11 19:21 core
+-rwxrwxrwx 1 root root  115 Apr 13 14:01 file.txt
+-rwxrwxrwx 1 root root 1.3K Apr 24 08:43 nohup.out
+-rwxrwxrwx 1 root root 7.3K Apr 16 20:12 passed_args_env
+-rwxrwxrwx 1 root root  411 Apr 16 20:12 passed_args_env.cpp
+-rwxrwxrwx 1 root root 2.0K Apr 23 14:43 script10_arrays.sh
+-rwxrwxrwx 1 root root  548 Apr 24 08:43 script11_io.sh
+-rwxrwxrwx 1 root root  216 Apr 13 14:18 script1.txt
+-rwxrwxrwx 1 root root   59 Apr  7 22:23 script2.sh
+-rwxrwxrwx 1 root root  100 Apr 10 01:00 script3_variables.sh
+-rwxrwxrwx 1 root root 1.4K Apr 13 09:44 script4_quoting.sh
+-rwxrwxrwx 1 root root   73 Apr 15 22:50 script5_arithmetic.sh
+-rwxrwxrwx 1 root root  147 Apr 16 20:18 script6_assignment_error.sh
+-rwxrwxrwx 1 root root 1016 Apr 22 00:26 script7_conditional.sh
+-rwxrwxrwx 1 root root  271 Apr 23 08:36 script8_loops.sh
+-rwxrwxrwx 1 root root  542 Apr 23 10:04 script9_case_select.sh
+-rwxrwxrwx 1 root root   10 Apr 24 08:43 test.txt
+ls: cannot access XXXX: No such file or directory
+------------------ 4
+------------------ 5
+------------------ 6

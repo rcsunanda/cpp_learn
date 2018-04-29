@@ -1,0 +1,4 @@
+The big bag of bits was bugged
+Regex expression should match this
+pipe|separated|words
+a word (within paranthesis)

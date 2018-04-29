@@ -1,0 +1,14 @@
+ssh -T localhost <<HERE
+cd /mnt/hgfs/Ubuntu_VM_Shared_Folder/learn_projects/bash
+./passed_args_env "$var"
+HERE
+
+foo="aaa bbb"
+path="aaa bbb"
+ 
+if [[ $path = "foo bar" ]]; then
+   echo "true"
+else
+   echo "false"
+fi
+

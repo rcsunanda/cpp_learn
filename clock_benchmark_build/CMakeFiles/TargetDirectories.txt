@@ -1,0 +1,3 @@
+/mnt/hgfs/Ubuntu_VM_Shared_Folder/learn_projects/clock_benchmark/build/CMakeFiles/clock_benchmark_posix_monotonoic.dir
+/mnt/hgfs/Ubuntu_VM_Shared_Folder/learn_projects/clock_benchmark/build/CMakeFiles/clock_benchmark_chrono.dir
+/mnt/hgfs/Ubuntu_VM_Shared_Folder/learn_projects/clock_benchmark/build/CMakeFiles/clock_benchmark_rdtscp.dir
